@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lena Marsh — Photographer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --black: #080808;
+      --gray-dark: #141414;
+      --gray: #1e1e1e;
+      --gray-mid: #2a2a2a;
+      --white: #ffffff;
+      --off-white: #e8e5e0;
+      --muted: rgba(232,229,224,0.45);
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Jost', sans-serif;
+      background: var(--black);
+      color: var(--off-white);
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* CUSTOM CURSOR */
+    .cursor {
+      width: 8px; height: 8px;
+      background: var(--white);
+      border-radius: 50%;
+      position: fixed;
+      top: 0; left: 0;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: width 0.2s, height 0.2s, background 0.2s;
+    }
+    .cursor-ring {
+      width: 32px; height: 32px;
+      border: 1px solid rgba(255,255,255,0.4);
+      border-radius: 50%;
+      position: fixed;
+      top: 0; left: 0;
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: all 0.15s ease-out;
+    }
+    body:hover .cursor { opacity: 1; }
+
+    .back-btn {
+      position: fixed;
+      top: 28px; left: 28px;
+      z-index: 200;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.7rem;
+      font-weight: 400;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    .back-btn:hover { color: var(--white); }
+
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 60px;
+      height: 72px;
+      mix-blend-mode: difference;
+    }
+    .nav-logo {
+      font-family: 'EB Garamond', serif;
+      font-size: 1.1rem;
+      font-style: italic;
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      color: var(--white);
+      text-decoration: none;
+    }
+    .nav-links { display: flex; gap: 40px; list-style: none; }
+    .nav-links a {
+      font-size: 0.7rem;
+      font-weight: 300;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--white);
+      text-decoration: none;
+      opacity: 0.6;
+      transition: opacity 0.2s;
+    }
+    .nav-links a:hover { opacity: 1; }
+
+    /* HERO */
+    .hero {
+      height: 100vh;
+      display: flex;
+      align-items: flex-end;
+      padding: 0 60px 80px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(8,8,8,0.2) 0%, rgba(8,8,8,0.6) 60%, rgba(8,8,8,0.95) 100%);
+      z-index: 1;
+    }
+    .hero-visual-fill {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .hero-photo-mock { display: none; }
+    .hero-bg-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 0;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 800px;
+    }
+    .hero h1 {
+      font-family: 'EB Garamond', serif;
+      font-size: clamp(4rem, 9vw, 10rem);
+      font-weight: 400;
+      line-height: 0.92;
+      letter-spacing: -0.02em;
+      color: var(--white);
+      margin-bottom: 28px;
+    }
+    .hero h1 em { font-style: italic; color: var(--off-white); opacity: 0.7; }
+    .hero-meta {
+      display: flex;
+      align-items: center;
+      gap: 40px;
+    }
+    .hero-sub {
+      font-size: 0.8rem;
+      font-weight: 300;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      max-width: 320px;
+      line-height: 1.8;
+    }
+    .hero-scroll {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      color: var(--muted);
+      font-size: 0.65rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+    .hero-scroll-line {
+      width: 1px;
+      height: 48px;
+      background: linear-gradient(to bottom, transparent, var(--muted));
+      animation: scrollLine 2s ease-in-out infinite;
+    }
+    @keyframes scrollLine {
+      0%, 100% { opacity: 0.3; transform: scaleY(0.5); transform-origin: top; }
+      50% { opacity: 1; transform: scaleY(1); }
+    }
+
+    /* GALLERY */
+    .gallery {
+      padding: 120px 0;
+    }
+    .gallery-label {
+      padding: 0 60px;
+      margin-bottom: 60px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+    .gallery-label span {
+      font-size: 0.7rem;
+      font-weight: 300;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .gallery-label-line { flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
+    .gallery-masonry {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      grid-auto-rows: 80px;
+      gap: 3px;
+      padding: 0 60px;
+    }
+    .gallery-item {
+      overflow: hidden;
+      background: var(--gray-dark);
+      cursor: pointer;
+      transition: transform 0.4s;
+      position: relative;
+    }
+    .gallery-item:hover { z-index: 2; transform: scale(1.01); }
+    .gallery-item::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0);
+      transition: background 0.3s;
+    }
+    .gallery-item:hover::after { background: rgba(0,0,0,0.2); }
+    .gi-visual {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .gi-label {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 12px 16px;
+      background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.7);
+    }
+    .gallery-item:hover .gi-label { opacity: 1; }
+    /* Grid positions */
+    .gi-1 { grid-column: 1 / 5; grid-row: 1 / 6; }
+    .gi-2 { grid-column: 5 / 9; grid-row: 1 / 4; }
+    .gi-3 { grid-column: 9 / 13; grid-row: 1 / 5; }
+    .gi-4 { grid-column: 5 / 7; grid-row: 4 / 8; }
+    .gi-5 { grid-column: 7 / 9; grid-row: 4 / 8; }
+    .gi-6 { grid-column: 9 / 13; grid-row: 5 / 8; }
+    .gi-7 { grid-column: 1 / 5; grid-row: 6 / 10; }
+    .gi-8 { grid-column: 5 / 9; grid-row: 8 / 12; }
+    .gi-9 { grid-column: 9 / 13; grid-row: 8 / 12; }
+    .gi-10 { grid-column: 1 / 5; grid-row: 10 / 13; }
+    .gi-11 { grid-column: 5 / 7; grid-row: 12 / 15; }
+    .gi-12 { grid-column: 7 / 13; grid-row: 12 / 15; }
+
+    /* ABOUT */
+    .about {
+      padding: 140px 60px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+    .about-portrait {
+      aspect-ratio: 3/4;
+      border-radius: 2px;
+      overflow: hidden;
+      position: relative;
+    }
+    .portrait-text { display: none; }
+    .about-eyebrow {
+      font-size: 0.68rem;
+      font-weight: 300;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .about-eyebrow::before { content: ''; width: 28px; height: 1px; background: var(--muted); }
+    .about h2 {
+      font-family: 'EB Garamond', serif;
+      font-size: clamp(2.5rem, 4vw, 4rem);
+      font-weight: 400;
+      line-height: 1.1;
+      color: var(--white);
+      margin-bottom: 28px;
+    }
+    .about h2 em { font-style: italic; color: var(--muted); }
+    .about p {
+      font-size: 0.9rem;
+      font-weight: 300;
+      color: var(--muted);
+      line-height: 1.9;
+      margin-bottom: 20px;
+    }
+    .about-stats {
+      display: flex;
+      gap: 40px;
+      margin-top: 40px;
+      padding-top: 32px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+    .a-stat-num {
+      font-family: 'EB Garamond', serif;
+      font-size: 2.5rem;
+      color: var(--white);
+      display: block;
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+    .a-stat-label { font-size: 0.7rem; color: var(--muted); letter-spacing: 0.08em; font-weight: 300; }
+
+    /* SERVICES */
+    .services {
+      padding: 100px 60px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+    .services-inner { max-width: 1200px; margin: 0 auto; }
+    .services-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 60px;
+    }
+    .services-top h2 {
+      font-family: 'EB Garamond', serif;
+      font-size: clamp(2rem, 3.5vw, 3rem);
+      font-weight: 400;
+      color: var(--white);
+    }
+    .services-top h2 em { font-style: italic; color: var(--muted); }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+    }
+    .service-block {
+      padding: 48px 40px;
+      background: var(--gray-dark);
+      border-top: 1px solid rgba(255,255,255,0.06);
+      transition: background 0.3s;
+    }
+    .service-block:hover { background: var(--gray); }
+    .service-num { font-family: 'EB Garamond', serif; font-size: 2rem; color: rgba(255,255,255,0.12); display: block; margin-bottom: 20px; }
+    .service-title { font-size: 0.95rem; font-weight: 400; color: var(--white); margin-bottom: 14px; letter-spacing: 0.04em; }
+    .service-desc { font-size: 0.82rem; color: var(--muted); line-height: 1.8; margin-bottom: 24px; font-weight: 300; }
+    .service-from { font-size: 0.78rem; color: rgba(255,255,255,0.4); }
+    .service-from strong { color: var(--white); }
+
+    /* CONTACT */
+    .contact {
+      padding: 140px 60px;
+      text-align: center;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+    .contact-eyebrow {
+      font-size: 0.68rem;
+      font-weight: 300;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      display: block;
+      margin-bottom: 24px;
+    }
+    .contact h2 {
+      font-family: 'EB Garamond', serif;
+      font-size: clamp(3rem, 7vw, 7rem);
+      font-weight: 400;
+      font-style: italic;
+      color: var(--white);
+      line-height: 1;
+      margin-bottom: 40px;
+    }
+    .contact-email {
+      display: inline-block;
+      font-size: 0.85rem;
+      font-weight: 300;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(255,255,255,0.15);
+      padding-bottom: 4px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .contact-email:hover { color: var(--white); border-color: rgba(255,255,255,0.4); }
+
+    /* FOOTER */
+    footer {
+      padding: 40px 60px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    footer span { font-size: 0.72rem; color: var(--muted); font-weight: 300; letter-spacing: 0.06em; }
+
+    /* LIGHTBOX */
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.95);
+      z-index: 500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+    .lightbox.open { opacity: 1; pointer-events: all; }
+    .lightbox-close {
+      position: absolute;
+      top: 28px; right: 28px;
+      font-size: 1.5rem;
+      color: var(--muted);
+      cursor: none;
+      background: none;
+      border: none;
+      transition: color 0.2s;
+    }
+    .lightbox-close:hover { color: var(--white); }
+    .lightbox-content {
+      width: 70vw;
+      max-height: 85vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    @media (max-width: 1024px) {
+      .gallery-masonry { padding: 0 24px; grid-auto-rows: 60px; }
+      .about { grid-template-columns: 1fr; }
+      .about-portrait { display: none; }
+      .services-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      nav, .hero, .gallery-label, .gallery-masonry, .about, .services, .contact, footer { padding-left: 24px; padding-right: 24px; }
+      .hero { padding-bottom: 60px; }
+      .gallery-masonry { grid-template-columns: 1fr 1fr; grid-auto-rows: 120px; }
+      .gi-1, .gi-2, .gi-3, .gi-4, .gi-5, .gi-6, .gi-7, .gi-8, .gi-9, .gi-10, .gi-11, .gi-12 {
+        grid-column: auto; grid-row: auto;
+      }
+      .services-grid { grid-template-columns: 1fr; }
+      .about-stats { flex-wrap: wrap; gap: 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <a href="index.html" class="back-btn">← Back to Nord Studio</a>
+
+  <nav>
+    <a href="#" class="nav-logo">Lena Marsh</a>
+    <ul class="nav-links">
+      <li><a href="#gallery">Work</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-visual-fill">
+      <img class="hero-bg-img" src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1600&q=80" alt="Photography hero">
+    </div>
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+      <h1>Light<br><em>&amp; Shadow</em></h1>
+      <div class="hero-meta">
+        <p class="hero-sub">Freelance photographer based in London. Editorial, portrait & landscape.</p>
+        <div class="hero-scroll">
+          <div class="hero-scroll-line"></div>
+          <span>Scroll</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section class="gallery" id="gallery">
+    <div class="gallery-label">
+      <span>Selected Work · 2019–2024</span>
+      <div class="gallery-label-line"></div>
+      <span>36 images</span>
+    </div>
+    <div class="gallery-masonry">
+      <div class="gallery-item gi-1">
+        <div class="gi-visual"><img src="https://images.unsplash.com/photo-1539635278303-d4002c07eae3?auto=format&fit=crop&w=800&q=80" alt="Marrakech" style="width:100%;height:100%;object-fit:cover;display:block;"></div>
+        <div class="gi-label">Marrakech, 2024</div>
+      </div>
+      <div class="gallery-item gi-2">
+        <div class="gi-visual"><img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?auto=format&fit=crop&w=800&q=80" alt="Portrait Series" style="width:100%;height:100%;object-fit:cover;display:block;"></div>
+        <div class="gi-label">Portrait Series, 2024</div>
+      </div>
+      <div class="gallery-item gi-3">
+        <div class="gi-visual"><img src="https://images.unsplash.com/photo-1476610182048-b716b8518aae?auto=format&fit=crop&w=800&q=80" alt="Iceland" style="width:100%;height:100%;object-fit:cover;display:block;"></div>
+        <div class="gi-label">Iceland, 2023</div>
+      </div>
+      <div class="gallery-item gi-4">
+        <div class="gi-visual"><img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=600&q=80" alt="Still Life" style="width:100%;height:100%;object-fit:cover;display:block;"></div>
+        <div class="gi-label">Still Life</div>
+      </div>
+      <div class="gallery-item gi-5">
+        <div class="gi-visual"><img src="https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=600&q=80" alt="Urban London" style="width:100%;height:100%;object-fit:cover;display:block;"></div>
+        <div class="gi-label">Urban, London</div>
+      </div>
+      <div class="gallery-item gi-6">
+        <div class="gi-visual"><img src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?auto=format&fit=crop&w=800&q=80" alt="Editorial" style="width:100%;height:100%;object-fit:cover;display:block;"></div>
+        <div class="gi-label">Editorial, 2023</div>
+      </div>
+      <div class="gallery-item gi-7">
+        <div class="gi-visual"><img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=800&q=80" alt="Havana" style="width:100%;height:100%;object-fit:cover;display:block;"></div>
+        <div class="gi-label">Havana, 2022</div>
+      </div>
+      <div class="gallery-item gi-8">
+        <div class="gi-visual"><img src="https://images.unsplash.com/photo-1488085061387-422e29b40080?auto=format&fit=crop&w=800&q=80" alt="Documentary" style="width:100%;height:100%;object-fit:cover;display:block;"></div>
+        <div class="gi-label">Documentary</div>
+      </div>
+      <div class="gallery-item gi-9">
+        <div class="gi-visual"><img src="https://images.unsplash.com/photo-1528360983277-13d401cdc186?auto=format&fit=crop&w=800&q=80" alt="Kyoto" style="width:100%;height:100%;object-fit:cover;display:block;"></div>
+        <div class="gi-label">Kyoto, 2022</div>
+      </div>
+      <div class="gallery-item gi-10">
+        <div class="gi-visual"><img src="https://images.unsplash.com/photo-1486325212027-8081e485255e?auto=format&fit=crop&w=800&q=80" alt="Architectural" style="width:100%;height:100%;object-fit:cover;display:block;"></div>
+        <div class="gi-label">Architectural</div>
+      </div>
+      <div class="gallery-item gi-11">
+        <div class="gi-visual"><img src="https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?auto=format&fit=crop&w=600&q=80" alt="Dusk Series" style="width:100%;height:100%;object-fit:cover;display:block;"></div>
+        <div class="gi-label">Dusk Series</div>
+      </div>
+      <div class="gallery-item gi-12">
+        <div class="gi-visual"><img src="https://images.unsplash.com/photo-1501854140801-50d01698950b?auto=format&fit=crop&w=1000&q=80" alt="Patagonia" style="width:100%;height:100%;object-fit:cover;display:block;"></div>
+        <div class="gi-label">Patagonia, 2021</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about" id="about">
+    <div class="about-portrait">
+      <img src="https://images.unsplash.com/photo-1554080353-a576cf803bda?auto=format&fit=crop&w=600&q=80" alt="Lena Marsh photographer" style="width:100%;height:100%;object-fit:cover;">
+    </div>
+    <div>
+      <div class="about-eyebrow">About Lena</div>
+      <h2>Chasing light<br>in the<br><em>margins.</em></h2>
+      <p>I'm Lena Marsh — a London-based photographer working across editorial, portraiture, documentary, and landscape. My work is drawn to the threshold moments: the minute before a storm, the breath before a laugh, the light at the edge of everything.</p>
+      <p>Trained at the London College of Communication and under the mentorship of Magnum photographer Ana Esperanza, I've spent the last decade with a camera in countries and cultures that continually rearrange what I thought I knew about seeing.</p>
+      <p>My work has appeared in Vogue, National Geographic, The Guardian, and Harper's Bazaar. I shoot on both digital and medium-format film — often on the same project.</p>
+      <div class="about-stats">
+        <div>
+          <span class="a-stat-num">11</span>
+          <span class="a-stat-label">Years working</span>
+        </div>
+        <div>
+          <span class="a-stat-num">38</span>
+          <span class="a-stat-label">Countries visited</span>
+        </div>
+        <div>
+          <span class="a-stat-num">4</span>
+          <span class="a-stat-label">Awards won</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section class="services" id="services">
+    <div class="services-inner">
+      <div class="services-top">
+        <h2>What I <em>shoot</em></h2>
+      </div>
+      <div class="services-grid">
+        <div class="service-block">
+          <span class="service-num">01</span>
+          <div class="service-title">Editorial & Magazine</div>
+          <p class="service-desc">Full-day and multi-day editorial commissions for print and digital publications. Art direction collaboration welcome. Travel assignments actively sought.</p>
+          <span class="service-from">From <strong>£1,200 / day</strong></span>
+        </div>
+        <div class="service-block">
+          <span class="service-num">02</span>
+          <div class="service-title">Portrait Sessions</div>
+          <p class="service-desc">Environmental and studio portraiture for individuals, creatives, executives, and cultural figures. Both black-and-white film and colour digital options available.</p>
+          <span class="service-from">From <strong>£480 / session</strong></span>
+        </div>
+        <div class="service-block">
+          <span class="service-num">03</span>
+          <div class="service-title">Brand & Commercial</div>
+          <p class="service-desc">Visual identity and campaign photography for brands whose aesthetic leans cinematic, raw, or unconventional. No white-background product work.</p>
+          <span class="service-from">From <strong>£2,400 / day</strong></span>
+        </div>
+        <div class="service-block">
+          <span class="service-num">04</span>
+          <div class="service-title">Documentary Projects</div>
+          <p class="service-desc">Long-form documentary commissions and independent personal projects exploring communities, subcultures, and landscapes over weeks or months.</p>
+          <span class="service-from">POA</span>
+        </div>
+        <div class="service-block">
+          <span class="service-num">05</span>
+          <div class="service-title">Fine Art Prints</div>
+          <p class="service-desc">Archival pigment prints from my personal series, available in limited editions. All printed at 300dpi on Hahnemühle Photo Rag 308gsm. Certificate of authenticity included.</p>
+          <span class="service-from">From <strong>£240 unframed</strong></span>
+        </div>
+        <div class="service-block">
+          <span class="service-num">06</span>
+          <div class="service-title">Workshops</div>
+          <p class="service-desc">Intimate group workshops (max 6 people) covering light reading, composition, post-processing, and the philosophy of looking. Held quarterly in London.</p>
+          <span class="service-from">From <strong>£320 / participant</strong></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="contact" id="contact">
+    <span class="contact-eyebrow">Let's create something together</span>
+    <h2>Say hello</h2>
+    <a href="mailto:hello@lenamarsh.com" class="contact-email">hello@lenamarsh.com</a>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <span>© 2024 Lena Marsh Photography</span>
+    <span>London, UK · Available for international commissions</span>
+  </footer>
+
+  <script>
+    const cursor = document.getElementById('cursor');
+    const ring = document.getElementById('cursorRing');
+    let mx = 0, my = 0, rx = 0, ry = 0;
+
+    document.addEventListener('mousemove', e => {
+      mx = e.clientX; my = e.clientY;
+      cursor.style.left = mx + 'px';
+      cursor.style.top = my + 'px';
+    });
+
+    function animateRing() {
+      rx += (mx - rx) * 0.12;
+      ry += (my - ry) * 0.12;
+      ring.style.left = rx + 'px';
+      ring.style.top = ry + 'px';
+      requestAnimationFrame(animateRing);
+    }
+    animateRing();
+  </script>
+
+</body>
+</html>

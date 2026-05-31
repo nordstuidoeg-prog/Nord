@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PulseClinic — Private Medical Clinic</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --blue: #2563a8;
+      --blue-dark: #1a4680;
+      --blue-mid: #3a7dc8;
+      --blue-light: #e8f2fb;
+      --blue-pale: #f0f6fc;
+      --white: #ffffff;
+      --black: #0f1a2e;
+      --text: #2d3d52;
+      --muted: #6b7c93;
+      --gray: #f4f6f9;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--white);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    .back-btn {
+      position: fixed;
+      top: 24px; left: 24px;
+      z-index: 200;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      color: var(--blue);
+      background: var(--white);
+      padding: 10px 18px;
+      border-radius: 50px;
+      border: 1px solid rgba(37,99,168,0.2);
+      text-decoration: none;
+      transition: all 0.25s;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    }
+    .back-btn:hover { background: var(--blue); color: var(--white); border-color: var(--blue); }
+
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 60px;
+      height: 72px;
+      background: rgba(255,255,255,0.97);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(37,99,168,0.1);
+      box-shadow: 0 1px 20px rgba(37,99,168,0.06);
+    }
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+    .nav-cross {
+      width: 32px; height: 32px;
+      background: var(--blue);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .nav-cross::before, .nav-cross::after {
+      content: '';
+      position: absolute;
+      background: var(--white);
+      border-radius: 2px;
+    }
+    .nav-cross::before { width: 14px; height: 3px; }
+    .nav-cross::after { width: 3px; height: 14px; }
+    .nav-name {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--black);
+    }
+    .nav-name span { color: var(--blue); }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--blue); }
+    .nav-book {
+      font-size: 0.875rem;
+      font-weight: 700;
+      color: var(--white);
+      background: var(--blue);
+      padding: 12px 28px;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .nav-book:hover { background: var(--blue-dark); transform: translateY(-1px); box-shadow: 0 4px 16px rgba(37,99,168,0.3); }
+
+    /* HERO */
+    .hero {
+      padding: 140px 60px 80px;
+      background: linear-gradient(160deg, var(--white) 0%, var(--blue-pale) 50%, var(--blue-light) 100%);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+      min-height: 90vh;
+    }
+    .hero-trust-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+    .trust-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--blue-light);
+      border: 1px solid rgba(37,99,168,0.2);
+      padding: 6px 14px;
+      border-radius: 50px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--blue);
+    }
+    .trust-badge::before { content: '✓'; }
+    .hero h1 {
+      font-family: 'Lora', serif;
+      font-size: clamp(2.5rem, 4.5vw, 4.5rem);
+      font-weight: 600;
+      line-height: 1.15;
+      color: var(--black);
+      margin-bottom: 24px;
+    }
+    .hero h1 em { font-style: italic; color: var(--blue); }
+    .hero-sub {
+      font-size: 1.05rem;
+      color: var(--muted);
+      line-height: 1.75;
+      max-width: 440px;
+      margin-bottom: 40px;
+    }
+    .hero-actions { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+    .btn-blue {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--white);
+      background: var(--blue);
+      padding: 16px 36px;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: all 0.25s;
+      box-shadow: 0 4px 16px rgba(37,99,168,0.3);
+    }
+    .btn-blue:hover { background: var(--blue-dark); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(37,99,168,0.4); }
+    .btn-ghost {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--blue);
+      padding: 16px 36px;
+      border-radius: 8px;
+      text-decoration: none;
+      border: 2px solid rgba(37,99,168,0.2);
+      transition: all 0.25s;
+    }
+    .btn-ghost:hover { border-color: var(--blue); background: var(--blue-light); }
+    .hero-stats {
+      display: flex;
+      gap: 32px;
+      margin-top: 48px;
+      padding-top: 32px;
+      border-top: 1px solid rgba(37,99,168,0.12);
+    }
+    .h-stat-num {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--blue);
+      display: block;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .h-stat-label { font-size: 0.78rem; color: var(--muted); }
+    .hero-card {
+      background: var(--white);
+      border-radius: 20px;
+      padding: 32px;
+      box-shadow: 0 8px 48px rgba(37,99,168,0.12);
+      border: 1px solid rgba(37,99,168,0.1);
+    }
+    .hero-card-title {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 24px;
+    }
+    .booking-form { display: flex; flex-direction: column; gap: 14px; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-label { font-size: 0.78rem; font-weight: 600; color: var(--text); }
+    .form-input, .form-select {
+      padding: 12px 16px;
+      border: 1.5px solid rgba(37,99,168,0.15);
+      border-radius: 8px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+      color: var(--text);
+      background: var(--gray);
+      transition: border-color 0.2s;
+      outline: none;
+    }
+    .form-input:focus, .form-select:focus { border-color: var(--blue); background: var(--white); }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .form-submit {
+      background: var(--blue);
+      color: var(--white);
+      border: none;
+      padding: 14px;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-top: 4px;
+    }
+    .form-submit:hover { background: var(--blue-dark); transform: translateY(-1px); }
+
+    /* SERVICES */
+    .services {
+      padding: 100px 60px;
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+    .services-label {
+      display: inline-block;
+      background: var(--blue-light);
+      color: var(--blue);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 6px 16px;
+      border-radius: 50px;
+      margin-bottom: 20px;
+    }
+    .services h2 {
+      font-family: 'Lora', serif;
+      font-size: clamp(2rem, 3.5vw, 3rem);
+      font-weight: 600;
+      color: var(--black);
+      margin-bottom: 60px;
+      max-width: 500px;
+      line-height: 1.2;
+    }
+    .services h2 em { font-style: italic; color: var(--blue); }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .service-card {
+      padding: 36px 32px;
+      background: var(--white);
+      border: 1px solid rgba(37,99,168,0.1);
+      border-radius: 16px;
+      transition: all 0.3s;
+    }
+    .service-card:hover {
+      border-color: var(--blue);
+      box-shadow: 0 8px 32px rgba(37,99,168,0.1);
+      transform: translateY(-4px);
+    }
+    .service-icon {
+      width: 52px; height: 52px;
+      background: var(--blue-light);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      margin-bottom: 20px;
+    }
+    .service-name { font-size: 1.05rem; font-weight: 700; color: var(--black); margin-bottom: 10px; }
+    .service-desc { font-size: 0.85rem; color: var(--muted); line-height: 1.7; margin-bottom: 20px; }
+    .service-link {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--blue);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: gap 0.2s;
+    }
+    .service-link:hover { gap: 10px; }
+
+    /* SPECIALISTS */
+    .specialists {
+      padding: 100px 60px;
+      background: var(--gray);
+    }
+    .specialists-inner { max-width: 1300px; margin: 0 auto; }
+    .spec-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 48px;
+    }
+    .spec-header h2 {
+      font-family: 'Lora', serif;
+      font-size: clamp(2rem, 3.5vw, 3rem);
+      font-weight: 600;
+      color: var(--black);
+    }
+    .spec-header h2 em { font-style: italic; color: var(--blue); }
+    .spec-header a {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--blue);
+      text-decoration: none;
+    }
+    .spec-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+    .spec-card {
+      background: var(--white);
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid rgba(37,99,168,0.08);
+      transition: all 0.3s;
+    }
+    .spec-card:hover { box-shadow: 0 8px 32px rgba(37,99,168,0.12); transform: translateY(-4px); }
+    .spec-photo {
+      height: 140px;
+      background: linear-gradient(135deg, var(--blue-light), var(--blue-pale));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      color: var(--blue);
+      font-family: 'Lora', serif;
+      font-weight: 600;
+    }
+    .spec-body { padding: 20px; }
+    .spec-name { font-size: 1rem; font-weight: 700; color: var(--black); margin-bottom: 4px; }
+    .spec-role { font-size: 0.75rem; font-weight: 600; color: var(--blue); margin-bottom: 8px; letter-spacing: 0.04em; }
+    .spec-qual { font-size: 0.78rem; color: var(--muted); line-height: 1.5; margin-bottom: 14px; }
+    .spec-book {
+      display: block;
+      text-align: center;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--blue);
+      background: var(--blue-light);
+      padding: 9px;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .spec-book:hover { background: var(--blue); color: var(--white); }
+
+    /* PROCESS */
+    .process {
+      padding: 100px 60px;
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+    .process h2 {
+      font-family: 'Lora', serif;
+      font-size: clamp(2rem, 3.5vw, 3rem);
+      font-weight: 600;
+      color: var(--black);
+      text-align: center;
+      margin-bottom: 60px;
+    }
+    .process h2 em { font-style: italic; color: var(--blue); }
+    .process-steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 40px;
+      position: relative;
+    }
+    .process-steps::before {
+      content: '';
+      position: absolute;
+      top: 28px;
+      left: 10%;
+      right: 10%;
+      height: 1px;
+      background: rgba(37,99,168,0.15);
+    }
+    .process-step { text-align: center; position: relative; }
+    .process-num {
+      width: 56px; height: 56px;
+      background: var(--blue);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--white);
+      margin: 0 auto 20px;
+      position: relative;
+      z-index: 2;
+    }
+    .process-title { font-size: 0.95rem; font-weight: 700; color: var(--black); margin-bottom: 8px; }
+    .process-desc { font-size: 0.82rem; color: var(--muted); line-height: 1.7; }
+
+    /* FOOTER */
+    footer {
+      background: var(--black);
+      color: rgba(255,255,255,0.7);
+      padding: 60px;
+    }
+    .footer-inner {
+      max-width: 1300px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 60px;
+      margin-bottom: 48px;
+    }
+    .footer-brand { font-size: 1.2rem; font-weight: 700; color: var(--white); margin-bottom: 12px; }
+    .footer-brand span { color: var(--blue-mid); }
+    .footer-tagline { font-size: 0.85rem; color: rgba(255,255,255,0.45); line-height: 1.7; max-width: 260px; }
+    .footer-col h4 {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--blue-mid);
+      margin-bottom: 20px;
+    }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .footer-col a { font-size: 0.85rem; color: rgba(255,255,255,0.5); text-decoration: none; transition: color 0.2s; }
+    .footer-col a:hover { color: var(--white); }
+    .footer-bottom {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding-top: 28px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.3);
+    }
+
+    @media (max-width: 1024px) {
+      .hero { grid-template-columns: 1fr; }
+      .services-grid { grid-template-columns: 1fr 1fr; }
+      .spec-grid { grid-template-columns: 1fr 1fr; }
+      .process-steps { grid-template-columns: 1fr 1fr; }
+      .process-steps::before { display: none; }
+      .footer-inner { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 768px) {
+      .nav-links, .nav-book { display: none; }
+      nav, .hero, .services, .specialists, .process, footer { padding-left: 24px; padding-right: 24px; }
+      .services-grid, .spec-grid, .process-steps { grid-template-columns: 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+      .hero-stats { flex-wrap: wrap; gap: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <a href="index.html" class="back-btn">← Back to Nord Studio</a>
+
+  <nav>
+    <a href="#" class="nav-brand">
+      <div class="nav-cross"></div>
+      <span class="nav-name">Pulse<span>Clinic</span></span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#services">Services</a></li>
+      <li><a href="#specialists">Specialists</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#book">Book</a></li>
+    </ul>
+    <a href="#book" class="nav-book">Book Appointment</a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="book">
+    <div>
+      <div class="hero-trust-bar">
+        <span class="trust-badge">CQC Registered</span>
+        <span class="trust-badge">GMC Accredited</span>
+        <span class="trust-badge">5-star rated</span>
+      </div>
+      <h1>Private healthcare<br>built around <em>you.</em></h1>
+      <p class="hero-sub">PulseClinic delivers world-class private medical care with same-week appointments, specialist access, and a patient experience that puts your wellbeing first — always.</p>
+      <div class="hero-actions">
+        <a href="#book" class="btn-blue">Book an Appointment</a>
+        <a href="#services" class="btn-ghost">Our Services</a>
+      </div>
+      <div class="hero-stats">
+        <div>
+          <span class="h-stat-num">48h</span>
+          <span class="h-stat-label">Average wait time</span>
+        </div>
+        <div>
+          <span class="h-stat-num">32</span>
+          <span class="h-stat-label">Clinical specialists</span>
+        </div>
+        <div>
+          <span class="h-stat-num">4.9★</span>
+          <span class="h-stat-label">Patient rating</span>
+        </div>
+      </div>
+    </div>
+    <div class="hero-card">
+      <div class="hero-card-title">Book an Appointment</div>
+      <div class="booking-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">First Name</label>
+            <input type="text" class="form-input" placeholder="Emma" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Last Name</label>
+            <input type="text" class="form-input" placeholder="Thompson" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Service Required</label>
+          <select class="form-select">
+            <option>General Practice</option>
+            <option>Cardiology</option>
+            <option>Dermatology</option>
+            <option>Mental Health & Wellbeing</option>
+            <option>Sports Medicine</option>
+            <option>Women's Health</option>
+            <option>Full Health MOT</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Preferred Date</label>
+            <input type="date" class="form-input" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Preferred Time</label>
+            <select class="form-select">
+              <option>Morning (8am–12pm)</option>
+              <option>Afternoon (12pm–5pm)</option>
+              <option>Evening (5pm–8pm)</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Phone Number</label>
+          <input type="tel" class="form-input" placeholder="+44 7700 900000" />
+        </div>
+        <button class="form-submit">Request Appointment →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section class="services" id="services">
+    <span class="services-label">What We Treat</span>
+    <h2>Specialist care across<br>all <em>disciplines</em></h2>
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="service-icon">❤️</div>
+        <div class="service-name">Cardiology</div>
+        <p class="service-desc">Comprehensive cardiac assessment including ECG, echocardiography, and 24-hour Holter monitoring, with consultant cardiologist review.</p>
+        <a href="#" class="service-link">Learn more →</a>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🧠</div>
+        <div class="service-name">Mental Health & Wellbeing</div>
+        <p class="service-desc">Confidential consultations with our psychiatry and psychology team. CBT, medication management, and bespoke mental wellness programmes.</p>
+        <a href="#" class="service-link">Learn more →</a>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🩺</div>
+        <div class="service-name">Comprehensive Health MOT</div>
+        <p class="service-desc">Our flagship 90-minute deep health assessment with 40+ biomarkers, cardiovascular screening, cancer markers, and a full doctor consultation.</p>
+        <a href="#" class="service-link">Learn more →</a>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">💆</div>
+        <div class="service-name">Dermatology</div>
+        <p class="service-desc">Mole mapping, skin cancer screening, acne management, and complex dermatological conditions treated by fellowship-trained dermatologists.</p>
+        <a href="#" class="service-link">Learn more →</a>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🏃</div>
+        <div class="service-name">Sports Medicine</div>
+        <p class="service-desc">Performance optimisation, injury assessment, and rehabilitation programmes for both elite athletes and active lifestyle patients.</p>
+        <a href="#" class="service-link">Learn more →</a>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">👶</div>
+        <div class="service-name">Women's Health</div>
+        <p class="service-desc">Full gynaecology, HRT management, fertility consultations, and well-woman screening in a compassionate, private environment.</p>
+        <a href="#" class="service-link">Learn more →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- SPECIALISTS -->
+  <section class="specialists" id="specialists">
+    <div class="specialists-inner">
+      <div class="spec-header">
+        <h2>Meet our <em>specialists</em></h2>
+        <a href="#">View all 32 specialists →</a>
+      </div>
+      <div class="spec-grid">
+        <div class="spec-card">
+          <div class="spec-photo" style="padding:0;overflow:hidden;"><img src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&w=400&q=80" alt="Dr. Amelia Chen" style="width:100%;height:100%;object-fit:cover;"></div>
+          <div class="spec-body">
+            <div class="spec-name">Dr. Amelia Chen</div>
+            <div class="spec-role">Consultant Cardiologist</div>
+            <p class="spec-qual">MBBS, MD, FRCP (Cardiology) · Trained at Royal Brompton Hospital · 18 years' experience</p>
+            <a href="#" class="spec-book">Book Appointment</a>
+          </div>
+        </div>
+        <div class="spec-card">
+          <div class="spec-photo" style="padding:0;overflow:hidden;"><img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&w=400&q=80" alt="Dr. Marcus Webb" style="width:100%;height:100%;object-fit:cover;"></div>
+          <div class="spec-body">
+            <div class="spec-name">Dr. Marcus Webb</div>
+            <div class="spec-role">Psychiatry & Wellbeing</div>
+            <p class="spec-qual">MBChB, MRCPsych · Former NHS Consultant · Specialises in anxiety, burnout & OCD</p>
+            <a href="#" class="spec-book">Book Appointment</a>
+          </div>
+        </div>
+        <div class="spec-card">
+          <div class="spec-photo" style="padding:0;overflow:hidden;"><img src="https://images.unsplash.com/photo-1623003596609-90db65d1db6b?auto=format&fit=crop&w=400&q=80" alt="Dr. Sana Mirza" style="width:100%;height:100%;object-fit:cover;"></div>
+          <div class="spec-body">
+            <div class="spec-name">Dr. Sana Mirza</div>
+            <div class="spec-role">Consultant Dermatologist</div>
+            <p class="spec-qual">MBBS, MRCP (Derm) · Fellowship from Mayo Clinic · Mole mapping specialist</p>
+            <a href="#" class="spec-book">Book Appointment</a>
+          </div>
+        </div>
+        <div class="spec-card">
+          <div class="spec-photo" style="padding:0;overflow:hidden;"><img src="https://images.unsplash.com/photo-1537368910025-700350fe46c7?auto=format&fit=crop&w=400&q=80" alt="Dr. James Okafor" style="width:100%;height:100%;object-fit:cover;"></div>
+          <div class="spec-body">
+            <div class="spec-name">Dr. James Okafor</div>
+            <div class="spec-role">Sports Medicine</div>
+            <p class="spec-qual">BSc Sport Sci., MBChB, MFSEM · Team doctor, Premier League · Injury & performance</p>
+            <a href="#" class="spec-book">Book Appointment</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESS -->
+  <section class="process">
+    <h2>Your care journey, <em>simplified</em></h2>
+    <div class="process-steps">
+      <div class="process-step">
+        <div class="process-num">1</div>
+        <div class="process-title">Book Online or Call</div>
+        <p class="process-desc">Select your service and preferred specialist. Same-week slots are available for most departments.</p>
+      </div>
+      <div class="process-step">
+        <div class="process-num">2</div>
+        <div class="process-title">Complete Your Intake</div>
+        <p class="process-desc">Our digital intake form captures your medical history and concerns before your appointment — saving valuable consultation time.</p>
+      </div>
+      <div class="process-step">
+        <div class="process-num">3</div>
+        <div class="process-title">Attend Your Appointment</div>
+        <p class="process-desc">Seen on time, every time. Our clinics are designed for privacy, comfort, and focused patient-doctor conversation.</p>
+      </div>
+      <div class="process-step">
+        <div class="process-num">4</div>
+        <div class="process-title">Receive Your Care Plan</div>
+        <p class="process-desc">Results and a personal care plan delivered securely to your patient portal within 24 hours of your appointment.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Pulse<span>Clinic</span></div>
+        <p class="footer-tagline">Private medical care you can trust. CQC registered, GMC accredited. Serving London since 2015.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Services</h4>
+        <ul>
+          <li><a href="#">Cardiology</a></li>
+          <li><a href="#">Mental Health</a></li>
+          <li><a href="#">Dermatology</a></li>
+          <li><a href="#">Health MOT</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Clinic</h4>
+        <ul>
+          <li><a href="#">Our Specialists</a></li>
+          <li><a href="#">Facilities</a></li>
+          <li><a href="#">Pricing & Insurance</a></li>
+          <li><a href="#">Patient Stories</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="#">0203 456 7890</a></li>
+          <li><a href="#">hello@pulseclinic.co.uk</a></li>
+          <li><a href="#">14 Harley Street, London</a></li>
+          <li><a href="#">Emergency Advice Line</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2024 PulseClinic Ltd. CQC Registration: 1-234567890. All rights reserved.</span>
+      <span>Privacy · Cookie Policy · Terms</span>
+    </div>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nomad Gear — Adventure Equipment</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,300;0,400;0,600;0,700;0,800;1,600&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --brown-dark: #2a1e0e;
+      --brown: #3d2e1e;
+      --brown-mid: #5c4428;
+      --brown-light: #7a5a38;
+      --tan: #c8a86c;
+      --tan-light: #e0c898;
+      --cream: #f5ede0;
+      --white: #ffffff;
+      --muted: rgba(200,168,108,0.55);
+      --olive: #4a5a2a;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Barlow', sans-serif;
+      background: var(--cream);
+      color: var(--brown-dark);
+      overflow-x: hidden;
+    }
+
+    .back-btn {
+      position: fixed;
+      top: 24px; left: 24px;
+      z-index: 200;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--cream);
+      background: rgba(42,30,14,0.85);
+      backdrop-filter: blur(12px);
+      padding: 10px 18px;
+      border-radius: 3px;
+      border: 1px solid rgba(200,168,108,0.3);
+      text-decoration: none;
+      transition: all 0.25s;
+    }
+    .back-btn:hover { background: var(--tan); color: var(--brown-dark); border-color: var(--tan); }
+
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 60px;
+      height: 72px;
+      background: rgba(42,30,14,0.95);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(200,168,108,0.15);
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      color: var(--cream);
+      text-decoration: none;
+    }
+    .nav-logo span { color: var(--tan); }
+    .nav-icon { font-size: 1.2rem; }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a {
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: rgba(245,237,224,0.55);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--tan); }
+    .nav-shop {
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--brown-dark);
+      background: var(--tan);
+      padding: 10px 24px;
+      border-radius: 3px;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    .nav-shop:hover { background: var(--tan-light); }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 100px 60px 80px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-bg-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 0;
+    }
+    .hero-bg-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(42,30,14,0.65) 0%, rgba(42,30,14,0.5) 50%, rgba(42,30,14,0.9) 100%);
+      z-index: 1;
+    }
+    .hero-terrain {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 200px;
+      background: linear-gradient(to top, rgba(42,30,14,0.95), transparent);
+    }
+    .hero-mountain {
+      position: absolute;
+      top: 120px; right: 60px;
+      width: 300px;
+      height: 260px;
+      opacity: 0.1;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(200,168,108,0.15);
+      border: 1px solid rgba(200,168,108,0.3);
+      padding: 8px 18px;
+      border-radius: 3px;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--tan);
+      width: fit-content;
+      margin-bottom: 28px;
+    }
+    .hero h1 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: clamp(4rem, 10vw, 12rem);
+      font-weight: 800;
+      line-height: 0.88;
+      letter-spacing: -0.01em;
+      color: var(--cream);
+      margin-bottom: 28px;
+      text-transform: uppercase;
+    }
+    .hero h1 em {
+      font-style: italic;
+      color: var(--tan);
+    }
+    .hero-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 40px;
+    }
+    .hero-sub {
+      max-width: 440px;
+      font-size: 1rem;
+      color: rgba(245,237,224,0.6);
+      line-height: 1.7;
+      font-weight: 300;
+    }
+    .hero-actions { display: flex; gap: 12px; flex-shrink: 0; }
+    .btn-tan {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--brown-dark);
+      background: var(--tan);
+      padding: 14px 32px;
+      border-radius: 3px;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .btn-tan:hover { background: var(--tan-light); transform: translateY(-2px); }
+    .btn-outline {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--cream);
+      padding: 14px 32px;
+      border-radius: 3px;
+      text-decoration: none;
+      border: 1px solid rgba(245,237,224,0.3);
+      transition: all 0.2s;
+    }
+    .btn-outline:hover { border-color: var(--tan); color: var(--tan); }
+
+    /* STRIP */
+    .strip {
+      background: var(--tan);
+      padding: 14px 60px;
+      display: flex;
+      justify-content: center;
+      gap: 60px;
+      align-items: center;
+    }
+    .strip-item {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--brown-dark);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .strip-item::before { content: '✓'; }
+
+    /* CATEGORIES */
+    .categories {
+      padding: 80px 60px;
+      background: var(--brown-dark);
+    }
+    .cat-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 40px;
+    }
+    .cat-header h2 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      color: var(--cream);
+    }
+    .cat-header h2 em { font-style: italic; color: var(--tan); }
+    .cat-header a {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--tan);
+      text-decoration: none;
+    }
+    .cat-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+    .cat-card {
+      aspect-ratio: 3/4;
+      background: var(--brown-mid);
+      border: 1px solid rgba(200,168,108,0.1);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 24px;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      transition: border-color 0.3s;
+    }
+    .cat-card:hover { border-color: rgba(200,168,108,0.3); }
+    .cat-icon { font-size: 3rem; position: absolute; top: 24px; left: 24px; opacity: 0.3; }
+    .cat-name {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--cream);
+      margin-bottom: 4px;
+    }
+    .cat-count {
+      font-size: 0.75rem;
+      color: var(--tan);
+      font-weight: 600;
+    }
+
+    /* PRODUCTS */
+    .products {
+      padding: 80px 60px;
+    }
+    .prod-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 40px;
+    }
+    .prod-header h2 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 800;
+      text-transform: uppercase;
+      color: var(--brown-dark);
+    }
+    .prod-header h2 em { font-style: italic; color: var(--brown-mid); }
+    .prod-filters {
+      display: flex;
+      gap: 8px;
+    }
+    .prod-filter {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 8px 18px;
+      border-radius: 3px;
+      border: 1px solid rgba(92,68,40,0.2);
+      background: transparent;
+      color: rgba(61,46,30,0.5);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .prod-filter.active, .prod-filter:hover {
+      background: var(--brown-dark);
+      color: var(--cream);
+      border-color: var(--brown-dark);
+    }
+    .prod-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    .prod-card {
+      background: var(--white);
+      border: 1px solid rgba(92,68,40,0.1);
+      border-radius: 4px;
+      overflow: hidden;
+      transition: all 0.3s;
+    }
+    .prod-card:hover { box-shadow: 0 8px 40px rgba(42,30,14,0.12); transform: translateY(-4px); }
+    .prod-visual {
+      height: 240px;
+      background: var(--cream);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .prod-tag {
+      position: absolute;
+      top: 14px; left: 14px;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 2px;
+    }
+    .tag-new { background: var(--olive); color: var(--white); }
+    .tag-sale { background: #8b2020; color: var(--white); }
+    .tag-pop { background: var(--brown-mid); color: var(--cream); }
+    .prod-wishlist {
+      position: absolute;
+      top: 12px; right: 12px;
+      width: 32px; height: 32px;
+      background: var(--white);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .prod-card:hover .prod-wishlist { opacity: 1; }
+    .prod-body { padding: 20px 20px 16px; }
+    .prod-cat {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--tan);
+      margin-bottom: 6px;
+    }
+    .prod-name { font-size: 1rem; font-weight: 600; color: var(--brown-dark); margin-bottom: 8px; line-height: 1.3; }
+    .prod-desc { font-size: 0.8rem; color: rgba(61,46,30,0.55); line-height: 1.6; margin-bottom: 14px; }
+    .prod-footer { display: flex; justify-content: space-between; align-items: center; }
+    .prod-price { font-size: 1.1rem; font-weight: 700; color: var(--brown-dark); }
+    .prod-old { font-size: 0.8rem; color: rgba(61,46,30,0.4); text-decoration: line-through; margin-left: 6px; }
+    .prod-add {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--cream);
+      background: var(--brown-dark);
+      border: none;
+      padding: 9px 18px;
+      border-radius: 3px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .prod-add:hover { background: var(--brown-mid); }
+
+    /* ABOUT */
+    .about {
+      padding: 100px 60px;
+      background: var(--brown-dark);
+      color: var(--cream);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+    .about h2 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: clamp(2.5rem, 5vw, 5rem);
+      font-weight: 800;
+      text-transform: uppercase;
+      line-height: 0.9;
+      margin-bottom: 28px;
+    }
+    .about h2 em { font-style: italic; color: var(--tan); }
+    .about p {
+      font-size: 0.95rem;
+      color: rgba(245,237,224,0.6);
+      line-height: 1.8;
+      font-weight: 300;
+      margin-bottom: 16px;
+    }
+    .about-nums {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-top: 40px;
+    }
+    .about-num {
+      padding: 24px;
+      background: rgba(200,168,108,0.06);
+      border: 1px solid rgba(200,168,108,0.12);
+      border-radius: 3px;
+    }
+    .an-val {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--tan);
+      display: block;
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+    .an-label { font-size: 0.8rem; color: rgba(245,237,224,0.45); font-weight: 300; }
+    .about-visual {
+      background: var(--brown-mid);
+      border: 1px solid rgba(200,168,108,0.12);
+      border-radius: 4px;
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+    .about-visual::before {
+      content: '⛰';
+      font-size: 10rem;
+      position: absolute;
+      top: -20px;
+      opacity: 0.06;
+    }
+    .about-vis-text {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--tan);
+      position: relative;
+    }
+
+    /* FOOTER */
+    footer {
+      background: var(--brown-dark);
+      border-top: 1px solid rgba(200,168,108,0.1);
+      padding: 60px;
+    }
+    .footer-inner {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 60px;
+      margin-bottom: 48px;
+    }
+    .footer-brand {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.6rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--cream);
+      margin-bottom: 14px;
+    }
+    .footer-brand span { color: var(--tan); }
+    .footer-tagline { font-size: 0.85rem; color: rgba(245,237,224,0.4); line-height: 1.7; max-width: 260px; font-weight: 300; }
+    .footer-col h4 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--tan);
+      margin-bottom: 20px;
+    }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .footer-col a { font-size: 0.85rem; color: rgba(245,237,224,0.45); text-decoration: none; transition: color 0.2s; font-weight: 300; }
+    .footer-col a:hover { color: var(--cream); }
+    .footer-bottom {
+      padding-top: 28px;
+      border-top: 1px solid rgba(200,168,108,0.08);
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.78rem;
+      color: rgba(245,237,224,0.25);
+    }
+
+    @media (max-width: 1024px) {
+      .cat-grid { grid-template-columns: 1fr 1fr; }
+      .prod-grid { grid-template-columns: 1fr 1fr; }
+      .about { grid-template-columns: 1fr; }
+      .about-visual { display: none; }
+      .footer-inner { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 768px) {
+      .nav-links, .nav-shop { display: none; }
+      nav, .hero, .strip, .categories, .products, .about, footer { padding-left: 24px; padding-right: 24px; }
+      .hero-row { flex-direction: column; align-items: flex-start; }
+      .strip { flex-direction: column; gap: 12px; align-items: flex-start; }
+      .cat-grid { grid-template-columns: 1fr 1fr; }
+      .prod-grid { grid-template-columns: 1fr; }
+      .prod-filters { flex-wrap: wrap; }
+    }
+  </style>
+</head>
+<body>
+
+  <a href="index.html" class="back-btn">← Back to Nord Studio</a>
+
+  <nav>
+    <a href="#" class="nav-logo">
+      <span class="nav-icon">⛰</span>
+      NOMAD <span>GEAR</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#categories">Categories</a></li>
+      <li><a href="#products">Shop</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#">Journal</a></li>
+    </ul>
+    <a href="#products" class="nav-shop">Shop Now</a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <img class="hero-bg-img" src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1600&q=80" alt="Mountain landscape">
+    <div class="hero-bg-overlay"></div>
+    <div class="hero-badge" style="position:relative;z-index:2;">⛰ Gear Tested at Altitude · Since 2012</div>
+    <h1 style="position:relative;z-index:2;">Built for<br>the <em>wild.</em></h1>
+    <div class="hero-row" style="position:relative;z-index:2;">
+      <p class="hero-sub">Every piece of Nomad Gear is designed, tested, and trusted by the people who live outside — mountaineers, trail runners, wilderness guides, and the simply restless.</p>
+      <div class="hero-actions">
+        <a href="#products" class="btn-tan">Shop Now</a>
+        <a href="#about" class="btn-outline">Our Story</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- STRIP -->
+  <div class="strip">
+    <span class="strip-item">Free shipping over £75</span>
+    <span class="strip-item">Lifetime repair guarantee</span>
+    <span class="strip-item">Ethically manufactured</span>
+    <span class="strip-item">30-day field returns</span>
+  </div>
+
+  <!-- CATEGORIES -->
+  <section class="categories" id="categories">
+    <div class="cat-header">
+      <h2>Shop by <em>Category</em></h2>
+      <a href="#">View All →</a>
+    </div>
+    <div class="cat-grid">
+      <div class="cat-card" style="padding:0;">
+        <img src="https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?auto=format&fit=crop&w=600&q=80" alt="Shelter" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
+        <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(42,30,14,0.85),rgba(42,30,14,0.2));"></div>
+        <div class="cat-name" style="position:relative;z-index:2;">Shelter & Sleep</div>
+        <div class="cat-count" style="position:relative;z-index:2;">34 Products</div>
+      </div>
+      <div class="cat-card" style="padding:0;">
+        <img src="https://images.unsplash.com/photo-1522163182402-834f871fd851?auto=format&fit=crop&w=600&q=80" alt="Climbing" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
+        <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(42,30,14,0.85),rgba(42,30,14,0.2));"></div>
+        <div class="cat-name" style="position:relative;z-index:2;">Climbing</div>
+        <div class="cat-count" style="position:relative;z-index:2;">52 Products</div>
+      </div>
+      <div class="cat-card" style="padding:0;">
+        <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80" alt="Footwear" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
+        <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(42,30,14,0.85),rgba(42,30,14,0.2));"></div>
+        <div class="cat-name" style="position:relative;z-index:2;">Footwear</div>
+        <div class="cat-count" style="position:relative;z-index:2;">28 Products</div>
+      </div>
+      <div class="cat-card" style="padding:0;">
+        <img src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=600&q=80" alt="Packs" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
+        <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(42,30,14,0.85),rgba(42,30,14,0.2));"></div>
+        <div class="cat-name" style="position:relative;z-index:2;">Packs & Bags</div>
+        <div class="cat-count" style="position:relative;z-index:2;">41 Products</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRODUCTS -->
+  <section class="products" id="products">
+    <div class="prod-header">
+      <h2>Best <em>Sellers</em></h2>
+      <div class="prod-filters">
+        <button class="prod-filter active">All</button>
+        <button class="prod-filter">Shelter</button>
+        <button class="prod-filter">Climbing</button>
+        <button class="prod-filter">Packs</button>
+        <button class="prod-filter">Footwear</button>
+      </div>
+    </div>
+    <div class="prod-grid">
+      <div class="prod-card">
+        <div class="prod-visual" style="background:#f0e8d8;padding:0;">
+          <img src="https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?auto=format&fit=crop&w=600&q=80" alt="Ridgeline tent" style="width:100%;height:100%;object-fit:cover;">
+          <div class="prod-tag tag-new">New</div>
+          <div class="prod-wishlist">♡</div>
+        </div>
+        <div class="prod-body">
+          <div class="prod-cat">Shelter</div>
+          <div class="prod-name">Ridgeline Pro 2P Tent</div>
+          <p class="prod-desc">Ultralight 3-season tent. 1.8kg. Freestanding. Dual vestibules. Seam-taped fly. Rated to 40mph winds.</p>
+          <div class="prod-footer">
+            <div><span class="prod-price">£389</span></div>
+            <button class="prod-add">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+      <div class="prod-card">
+        <div class="prod-visual" style="background:#e8e0d0;padding:0;">
+          <img src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=600&q=80" alt="Strider pack" style="width:100%;height:100%;object-fit:cover;">
+          <div class="prod-tag tag-pop">Popular</div>
+          <div class="prod-wishlist">♡</div>
+        </div>
+        <div class="prod-body">
+          <div class="prod-cat">Packs</div>
+          <div class="prod-name">Strider 40L Pack</div>
+          <p class="prod-desc">Technical daypack to 3-day pack. Aluminium frame sheet. Hip belt with tool loops. HDPE frame board included.</p>
+          <div class="prod-footer">
+            <div><span class="prod-price">£179</span></div>
+            <button class="prod-add">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+      <div class="prod-card">
+        <div class="prod-visual" style="background:#d8e0d0;padding:0;">
+          <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80" alt="Apex boot" style="width:100%;height:100%;object-fit:cover;">
+          <div class="prod-tag tag-new">New</div>
+          <div class="prod-wishlist">♡</div>
+        </div>
+        <div class="prod-body">
+          <div class="prod-cat">Footwear</div>
+          <div class="prod-name">Apex GTX Mid Boot</div>
+          <p class="prod-desc">Gore-Tex waterproof membrane. Vibram Megagrip outsole. Full-grain leather upper. Best-in-class ankle support for technical terrain.</p>
+          <div class="prod-footer">
+            <div><span class="prod-price">£224</span></div>
+            <button class="prod-add">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+      <div class="prod-card">
+        <div class="prod-visual" style="background:#ede0d0;padding:0;">
+          <img src="https://images.unsplash.com/photo-1522163182402-834f871fd851?auto=format&fit=crop&w=600&q=80" alt="Granite harness" style="width:100%;height:100%;object-fit:cover;">
+          <div class="prod-tag tag-sale">Sale</div>
+          <div class="prod-wishlist">♡</div>
+        </div>
+        <div class="prod-body">
+          <div class="prod-cat">Climbing</div>
+          <div class="prod-name">Granite Harness V3</div>
+          <p class="prod-desc">All-day comfort for multi-pitch and big wall. Dyneema tie-in points. Gear loops with HDPE stiffener. CE/EN 12277-C certified.</p>
+          <div class="prod-footer">
+            <div><span class="prod-price">£89</span><span class="prod-old">£119</span></div>
+            <button class="prod-add">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+      <div class="prod-card">
+        <div class="prod-visual" style="background:#f0eae0;padding:0;">
+          <img src="https://images.unsplash.com/photo-1602143407151-7111542de6e8?auto=format&fit=crop&w=600&q=80" alt="Summit filter bottle" style="width:100%;height:100%;object-fit:cover;">
+          <div class="prod-wishlist">♡</div>
+        </div>
+        <div class="prod-body">
+          <div class="prod-cat">Hydration</div>
+          <div class="prod-name">Summit Filter Bottle 1L</div>
+          <p class="prod-desc">Hollow-fibre filter removes 99.9999% of bacteria and protozoa. No chemicals, no pumping. Safe water anywhere, instantly.</p>
+          <div class="prod-footer">
+            <div><span class="prod-price">£44</span></div>
+            <button class="prod-add">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+      <div class="prod-card">
+        <div class="prod-visual" style="background:#e0e8d8;padding:0;">
+          <img src="https://images.unsplash.com/photo-1571004775009-e3f0e7d13e85?auto=format&fit=crop&w=600&q=80" alt="Trail quilt" style="width:100%;height:100%;object-fit:cover;">
+          <div class="prod-tag tag-pop">Popular</div>
+          <div class="prod-wishlist">♡</div>
+        </div>
+        <div class="prod-body">
+          <div class="prod-cat">Shelter</div>
+          <div class="prod-name">Trail Quilt 850 Down</div>
+          <p class="prod-desc">850-fill power RDS-certified down. Comfort: 0°C. Extreme: -10°C. Integrated groundsheet strap system. 680g.</p>
+          <div class="prod-footer">
+            <div><span class="prod-price">£279</span></div>
+            <button class="prod-add">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about" id="about">
+    <div>
+      <h2>We go<br>out there<br><em>too.</em></h2>
+      <p>Nomad Gear was started in 2012 by three mountaineers who were fed up with gear that looked good in catalogues and failed on the mountain. We design in the field, test at altitude, and refuse to ship anything we wouldn't trust with our own lives.</p>
+      <p>Every product in our line has been carried up peaks, dragged through rivers, and beaten into submission at test camps in the Alps, Patagonia, and the Scottish Highlands. If it makes the cut, it makes the store.</p>
+      <div class="about-nums">
+        <div class="about-num">
+          <span class="an-val">12+</span>
+          <div class="an-label">Years designing for the outdoors</div>
+        </div>
+        <div class="about-num">
+          <span class="an-val">220+</span>
+          <div class="an-label">Products in current range</div>
+        </div>
+        <div class="about-num">
+          <span class="an-val">98%</span>
+          <div class="an-label">Customer recommend score</div>
+        </div>
+        <div class="about-num">
+          <span class="an-val">∞</span>
+          <div class="an-label">Lifetime repair guarantee</div>
+        </div>
+      </div>
+    </div>
+    <div class="about-visual" style="padding:0;overflow:hidden;">
+      <img src="https://images.unsplash.com/photo-1551632811-561732d1e306?auto=format&fit=crop&w=800&q=80" alt="Mountain adventure" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
+      <div style="position:absolute;inset:0;background:rgba(42,30,14,0.5);"></div>
+      <span class="about-vis-text" style="position:relative;z-index:2;">Built for the mountain</span>
+      <span class="about-vis-text" style="color:rgba(200,168,108,0.8);font-size:0.75rem;position:relative;z-index:2;">Tested. Trusted. Nomad.</span>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">NOMAD <span>GEAR</span></div>
+        <p class="footer-tagline">Adventure equipment built for people who actually go outside. Tested in the Alps, Patagonia, and the Scottish Highlands.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Shop</h4>
+        <ul>
+          <li><a href="#">All Products</a></li>
+          <li><a href="#">New Arrivals</a></li>
+          <li><a href="#">Sale</a></li>
+          <li><a href="#">Gift Cards</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#">Our Story</a></li>
+          <li><a href="#">Sustainability</a></li>
+          <li><a href="#">Journal</a></li>
+          <li><a href="#">Ambassadors</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Support</h4>
+        <ul>
+          <li><a href="#">Shipping & Returns</a></li>
+          <li><a href="#">Repair Programme</a></li>
+          <li><a href="#">Sizing Guide</a></li>
+          <li><a href="#">hello@nomadgear.co</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2024 Nomad Gear Ltd. Registered in Scotland. B Corp Certified.</span>
+      <span>Privacy · Terms · Accessibility</span>
+    </div>
+  </footer>
+
+</body>
+</html>
