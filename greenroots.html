@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GreenRoots — Organic Food Delivery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,400&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --green-dark: #1a3a2e;
+      --green: #2d6048;
+      --green-mid: #3a7a5c;
+      --green-light: #5a9e7a;
+      --green-pale: #e8f5ef;
+      --green-wash: #f0f7f4;
+      --yellow: #e8c84a;
+      --white: #ffffff;
+      --black: #0f1f16;
+      --muted: #5a7066;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--white);
+      color: var(--black);
+      overflow-x: hidden;
+    }
+
+    .back-btn {
+      position: fixed;
+      top: 24px; left: 24px;
+      z-index: 200;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--green-dark);
+      background: #ffffff;
+      
+      padding: 10px 18px;
+      border-radius: 50px;
+      border: 1px solid rgba(45,96,72,0.2);
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+    .back-btn:hover { background: var(--green); color: var(--white); border-color: var(--green); }
+
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 60px;
+      height: 72px;
+      background: #ffffff;
+      
+      border-bottom: 1px solid rgba(45,96,72,0.1);
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.4rem;
+      color: var(--green-dark);
+      text-decoration: none;
+    }
+    .nav-logo-icon {
+      width: 32px; height: 32px;
+      background: var(--green);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+    }
+    .nav-links { display: flex; gap: 36px; list-style: none; }
+    .nav-links a {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--green-dark); }
+    .nav-order {
+      font-size: 0.875rem;
+      font-weight: 700;
+      color: var(--white);
+      background: var(--green);
+      padding: 12px 28px;
+      border-radius: 50px;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .nav-order:hover { background: var(--green-dark); transform: translateY(-1px); }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      padding: 100px 60px 60px;
+      gap: 60px;
+      background: var(--green-wash);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -100px; right: -100px;
+      width: 500px; height: 500px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(45,96,72,0.08) 0%, transparent 70%);
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--green-pale);
+      border: 1px solid rgba(45,96,72,0.2);
+      padding: 8px 18px;
+      border-radius: 50px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--green);
+      margin-bottom: 28px;
+    }
+    .hero-badge::before { content: '🌿'; font-size: 0.9rem; }
+    .hero h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(3rem, 5.5vw, 5.5rem);
+      line-height: 1.05;
+      color: var(--green-dark);
+      margin-bottom: 24px;
+    }
+    .hero h1 em { font-style: italic; color: var(--green-mid); }
+    .hero-sub {
+      font-size: 1.05rem;
+      color: var(--muted);
+      line-height: 1.75;
+      max-width: 440px;
+      margin-bottom: 40px;
+    }
+    .hero-actions { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+    .btn-green {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--white);
+      background: var(--green);
+      padding: 16px 36px;
+      border-radius: 50px;
+      text-decoration: none;
+      transition: all 0.25s;
+      box-shadow: 0 4px 20px rgba(45,96,72,0.3);
+    }
+    .btn-green:hover { background: var(--green-dark); transform: translateY(-2px); box-shadow: 0 8px 28px rgba(45,96,72,0.4); }
+    .btn-white {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--green-dark);
+      background: var(--white);
+      padding: 16px 36px;
+      border-radius: 50px;
+      text-decoration: none;
+      border: 2px solid rgba(45,96,72,0.2);
+      transition: all 0.25s;
+    }
+    .btn-white:hover { border-color: var(--green); color: var(--green); }
+    .hero-trust {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      margin-top: 40px;
+    }
+    .hero-trust-text { font-size: 0.82rem; color: var(--muted); }
+    .hero-trust-text strong { color: var(--green-dark); }
+    .hero-visual {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .hero-box {
+      width: 100%;
+      max-width: 480px;
+      aspect-ratio: 1;
+      background: var(--green);
+      border-radius: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-box-inner {
+      text-align: center;
+      color: rgba(255,255,255,0.85);
+      position: relative;
+      z-index: 2;
+    }
+    .hero-box-emoji { font-size: 5rem; display: block; margin-bottom: 20px; }
+    .hero-box-label {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.4rem;
+      font-style: italic;
+      opacity: 0.8;
+    }
+    .hero-box-bg-img {
+      position: absolute;
+      inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      opacity: 0.55;
+      border-radius: 32px;
+    }
+    .hero-floating {
+      position: absolute;
+      background: var(--white);
+      border-radius: 16px;
+      padding: 14px 18px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .hero-floating.top { top: 30px; right: -20px; }
+    .hero-floating.bottom { bottom: 30px; left: -20px; }
+    .hf-icon { font-size: 1.5rem; }
+    .hf-text strong { display: block; font-size: 0.85rem; font-weight: 700; color: var(--green-dark); }
+    .hf-text span { font-size: 0.72rem; color: var(--muted); }
+
+    /* HOW IT WORKS */
+    .how {
+      padding: 100px 60px;
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+    .section-tag {
+      display: inline-block;
+      background: var(--green-pale);
+      color: var(--green);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 6px 16px;
+      border-radius: 50px;
+      margin-bottom: 20px;
+    }
+    .section-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2.2rem, 4vw, 3.5rem);
+      color: var(--green-dark);
+      line-height: 1.1;
+      margin-bottom: 60px;
+    }
+    .section-title em { font-style: italic; color: var(--green-mid); }
+    .how-steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2px;
+      background: var(--green-pale);
+      border-radius: 20px;
+      overflow: hidden;
+    }
+    .how-step {
+      background: var(--white);
+      padding: 40px 32px;
+      position: relative;
+    }
+    .step-num {
+      font-family: 'DM Serif Display', serif;
+      font-size: 3.5rem;
+      color: var(--green-pale);
+      line-height: 1;
+      margin-bottom: 16px;
+      display: block;
+    }
+    .step-icon { font-size: 2rem; margin-bottom: 16px; display: block; }
+    .step-title { font-size: 1rem; font-weight: 700; color: var(--green-dark); margin-bottom: 10px; }
+    .step-desc { font-size: 0.85rem; color: var(--muted); line-height: 1.7; }
+
+    /* MENU */
+    .menu-section {
+      padding: 100px 60px;
+      background: var(--green-wash);
+    }
+    .menu-inner { max-width: 1300px; margin: 0 auto; }
+    .menu-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 48px;
+    }
+    .menu-header a {
+      font-size: 0.875rem;
+      font-weight: 700;
+      color: var(--green);
+      text-decoration: none;
+    }
+    .menu-header a:hover { color: var(--green-dark); }
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    .menu-card {
+      background: var(--white);
+      border-radius: 20px;
+      overflow: hidden;
+      border: 1px solid rgba(45,96,72,0.08);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .menu-card:hover { transform: translateY(-6px); box-shadow: 0 16px 48px rgba(45,96,72,0.12); }
+    .menu-visual {
+      height: 180px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4rem;
+      position: relative;
+    }
+    .menu-tag {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      background: var(--green);
+      color: var(--white);
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 50px;
+    }
+    .menu-body { padding: 24px; }
+    .menu-name { font-size: 1.05rem; font-weight: 700; color: var(--green-dark); margin-bottom: 6px; }
+    .menu-desc { font-size: 0.82rem; color: var(--muted); margin-bottom: 16px; line-height: 1.6; }
+    .menu-footer { display: flex; justify-content: space-between; align-items: center; }
+    .menu-price { font-size: 1.1rem; font-weight: 700; color: var(--green); }
+    .menu-add {
+      background: var(--green-pale);
+      color: var(--green-dark);
+      border: none;
+      padding: 8px 20px;
+      border-radius: 50px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .menu-add:hover { background: var(--green); color: var(--white); }
+
+    /* WHY US */
+    .why {
+      padding: 100px 60px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+    .why-visual {
+      background: var(--green-dark);
+      border-radius: 28px;
+      padding: 60px 48px;
+      color: var(--white);
+      position: relative;
+      overflow: hidden;
+    }
+    .why-visual::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(26,58,46,0.72);
+      z-index: 1;
+      border-radius: 28px;
+    }
+    .why-visual > * { position: relative; z-index: 2; }
+    .why-bg-img {
+      position: absolute;
+      inset: 0; width: 100%; height: 100%;
+      object-fit: cover;
+      border-radius: 28px;
+      filter: saturate(1.1) brightness(0.6);
+    }
+    .why-stat { margin-bottom: 40px; }
+    .why-stat-num {
+      font-family: 'DM Serif Display', serif;
+      font-size: 3.5rem;
+      color: var(--yellow);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+    .why-stat-label { font-size: 0.9rem; color: rgba(255,255,255,0.65); }
+    .why-features { list-style: none; display: flex; flex-direction: column; gap: 16px; }
+    .why-feature {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+    }
+    .why-feature-icon {
+      width: 28px; height: 28px;
+      background: var(--yellow);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .why-feature-text { font-size: 0.9rem; font-weight: 500; color: var(--green-dark); }
+    .why-feature-sub { font-size: 0.8rem; color: var(--muted); line-height: 1.5; }
+
+    /* FARMS */
+    .farms {
+      padding: 80px 60px;
+      background: var(--green-dark);
+      color: var(--white);
+      text-align: center;
+    }
+    .farms-inner { max-width: 1300px; margin: 0 auto; }
+    .farms h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      margin-bottom: 16px;
+    }
+    .farms h2 em { font-style: italic; color: var(--yellow); }
+    .farms-sub { color: rgba(255,255,255,0.6); max-width: 500px; margin: 0 auto 56px; font-size: 0.95rem; line-height: 1.7; }
+    .farms-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+    .farm-card {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      padding: 32px 24px;
+      text-align: left;
+      transition: background 0.3s;
+    }
+    .farm-card:hover { background: rgba(255,255,255,0.1); }
+    .farm-icon { font-size: 2rem; margin-bottom: 16px; display: block; }
+    .farm-name { font-size: 0.95rem; font-weight: 700; margin-bottom: 6px; }
+    .farm-loc { font-size: 0.78rem; color: rgba(255,255,255,0.5); margin-bottom: 12px; }
+    .farm-desc { font-size: 0.8rem; color: rgba(255,255,255,0.6); line-height: 1.6; }
+
+    /* FOOTER */
+    footer {
+      background: var(--green-dark);
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding: 60px;
+    }
+    .footer-inner {
+      max-width: 1300px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 60px;
+      color: rgba(255,255,255,0.7);
+    }
+    .footer-logo {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.6rem;
+      color: var(--white);
+      margin-bottom: 14px;
+    }
+    .footer-tagline { font-size: 0.85rem; color: rgba(255,255,255,0.5); line-height: 1.7; max-width: 260px; }
+    .footer-col h4 {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--yellow);
+      margin-bottom: 20px;
+    }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .footer-col a { font-size: 0.85rem; color: rgba(255,255,255,0.55); text-decoration: none; transition: color 0.2s; }
+    .footer-col a:hover { color: var(--white); }
+    .footer-bottom {
+      max-width: 1300px;
+      margin: 40px auto 0;
+      padding-top: 28px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: rgba(255,255,255,0.35);
+      font-size: 0.8rem;
+    }
+
+    @media (max-width: 1024px) {
+      .hero { grid-template-columns: 1fr; }
+      .hero-visual { display: flex; max-width: 420px; margin: 0 auto; }
+      .hero-floating { display: none; }
+      .how-steps { grid-template-columns: 1fr 1fr; }
+      .menu-grid { grid-template-columns: 1fr 1fr; }
+      .why { grid-template-columns: 1fr; }
+      .farms-grid { grid-template-columns: 1fr 1fr; }
+      .footer-inner { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 768px) {
+      .nav-links, .nav-order { display: none; }
+      nav, .hero, .how, .menu-section, .why, .farms, footer { padding-left: 24px; padding-right: 24px; }
+      .hero-visual { max-width: 100%; }
+      .hero-box { aspect-ratio: 4/3; }
+      .how-steps { grid-template-columns: 1fr; }
+      .menu-grid { grid-template-columns: 1fr; }
+      .farms-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <a href="index.html" class="back-btn">← Back to Nord Studio</a>
+
+  <nav>
+    <a href="#" class="nav-logo">
+      <div class="nav-logo-icon">🌿</div>
+      GreenRoots
+    </a>
+    <ul class="nav-links">
+      <li><a href="#how">How It Works</a></li>
+      <li><a href="#menu">Menu</a></li>
+      <li><a href="#farms">Our Farms</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+    </ul>
+    <a href="#menu" class="nav-order">Start Your Box</a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div>
+      <div class="hero-badge">Certified Organic · Farm to Door in 24h</div>
+      <h1>Eat fresh.<br>Live <em>well.</em><br>Waste nothing.</h1>
+      <p class="hero-sub">GreenRoots delivers certified organic produce and chef-crafted meal kits directly from our network of local farms. No pesticides, no middlemen, no compromises.</p>
+      <div class="hero-actions">
+        <a href="#menu" class="btn-green">Build My Box</a>
+        <a href="#how" class="btn-white">See How It Works</a>
+      </div>
+      <div class="hero-trust">
+        <span class="hero-trust-text"><strong>12,400+</strong> households subscribe weekly</span>
+        <span style="width:1px;height:20px;background:rgba(90,112,102,0.3);display:block;"></span>
+        <span class="hero-trust-text"><strong>Pause or cancel</strong> anytime</span>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-box">
+        <img class="hero-box-bg-img" src="https://images.unsplash.com/photo-1610348725531-843dff563e2c?w=800&q=80" alt="Fresh organic produce" loading="eager">
+        <div class="hero-box-inner">
+          <div class="hero-box-label">This Week's Box</div>
+        </div>
+      </div>
+      <div class="hero-floating top">
+        <div class="hf-icon">✅</div>
+        <div class="hf-text">
+          <strong>100% Certified Organic</strong>
+          <span>No synthetic pesticides ever</span>
+        </div>
+      </div>
+      <div class="hero-floating bottom">
+        <div class="hf-icon">🚚</div>
+        <div class="hf-text">
+          <strong>Next delivery: Tuesday</strong>
+          <span>Order by Sunday midnight</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="how" id="how">
+    <div><span class="section-tag">Simple as that</span></div>
+    <h2 class="section-title">Farm to door in<br><em>four easy steps</em></h2>
+    <div class="how-steps">
+      <div class="how-step">
+        <span class="step-num">01</span>
+        <span class="step-icon">🧺</span>
+        <div class="step-title">Choose Your Box</div>
+        <p class="step-desc">Pick from our Essentials, Family, or Chef's Selection box — each curated for freshness and seasonal variety.</p>
+      </div>
+      <div class="how-step">
+        <span class="step-num">02</span>
+        <span class="step-icon">✏️</span>
+        <div class="step-title">Customise Your Order</div>
+        <p class="step-desc">Swap items you don't love, add extras, or choose a recipe kit. Your box, your rules.</p>
+      </div>
+      <div class="how-step">
+        <span class="step-num">03</span>
+        <span class="step-icon">🌱</span>
+        <div class="step-title">Harvested Fresh</div>
+        <p class="step-desc">Our partner farms harvest within 24 hours of your delivery window. No cold-store delays. Peak nutrients, peak flavour.</p>
+      </div>
+      <div class="how-step">
+        <span class="step-num">04</span>
+        <span class="step-icon">🏠</span>
+        <div class="step-title">Delivered to Your Door</div>
+        <p class="step-desc">Arrive in our fully compostable insulated packaging. Cool, fresh, and ready to cook — left safely at your door.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- MENU -->
+  <section class="menu-section" id="menu">
+    <div class="menu-inner">
+      <div class="menu-header">
+        <div>
+          <span class="section-tag">This Week's Selection</span>
+          <h2 class="section-title" style="margin-bottom:0;">Our freshest <em>arrivals</em></h2>
+        </div>
+        <a href="#">View full menu →</a>
+      </div>
+      <div class="menu-grid">
+        <div class="menu-card">
+          <div class="menu-visual" style="background:#f0f7f0;padding:0;overflow:hidden;"><img src="https://images.unsplash.com/photo-1576045057995-568f588f82fb?w=600&q=80" alt="Fresh greens" style="width:100%;height:100%;object-fit:cover;" loading="lazy"><div class="menu-tag">Best Seller</div></div>
+          <div class="menu-body">
+            <div class="menu-name">Heritage Greens Box</div>
+            <p class="menu-desc">Kale, rocket, spinach, chard, and mixed salad leaves — all grown on Ashford Farm, Kent. Washed and ready to eat.</p>
+            <div class="menu-footer">
+              <span class="menu-price">£18.50/wk</span>
+              <button class="menu-add">Add to Box</button>
+            </div>
+          </div>
+        </div>
+        <div class="menu-card">
+          <div class="menu-visual" style="background:#fff8e8;padding:0;overflow:hidden;"><img src="https://images.unsplash.com/photo-1558818498-28c1e002b655?w=600&q=80" alt="Heirloom tomatoes" style="width:100%;height:100%;object-fit:cover;" loading="lazy"><div class="menu-tag">Seasonal</div></div>
+          <div class="menu-body">
+            <div class="menu-name">Heirloom Tomato Selection</div>
+            <p class="menu-desc">Six varieties of heritage tomatoes from Briar Hill Organic Farm — ridged, striped, and bursting with summer flavour.</p>
+            <div class="menu-footer">
+              <span class="menu-price">£12.00/wk</span>
+              <button class="menu-add">Add to Box</button>
+            </div>
+          </div>
+        </div>
+        <div class="menu-card">
+          <div class="menu-visual" style="background:#f7f0e8;padding:0;overflow:hidden;"><img src="https://images.unsplash.com/photo-1590779033100-9f60a05a013d?w=600&q=80" alt="Root vegetables" style="width:100%;height:100%;object-fit:cover;" loading="lazy"><div class="menu-tag">New</div></div>
+          <div class="menu-body">
+            <div class="menu-name">Root Vegetable Bundle</div>
+            <p class="menu-desc">Parsnips, golden beetroot, rainbow carrots, and celeriac. Perfect for roasting, soups, or warming autumn salads.</p>
+            <div class="menu-footer">
+              <span class="menu-price">£14.00/wk</span>
+              <button class="menu-add">Add to Box</button>
+            </div>
+          </div>
+        </div>
+        <div class="menu-card">
+          <div class="menu-visual" style="background:#f0f9f5;padding:0;overflow:hidden;"><img src="https://images.unsplash.com/photo-1519162808019-7de1683fa2ad?w=600&q=80" alt="Avocado and citrus" style="width:100%;height:100%;object-fit:cover;" loading="lazy"><div class="menu-tag">Popular</div></div>
+          <div class="menu-body">
+            <div class="menu-name">Avo & Citrus Pack</div>
+            <p class="menu-desc">Hass avocados ripened to perfection, paired with blood oranges and unwaxed lemons for vibrant morning cooking.</p>
+            <div class="menu-footer">
+              <span class="menu-price">£16.00/wk</span>
+              <button class="menu-add">Add to Box</button>
+            </div>
+          </div>
+        </div>
+        <div class="menu-card">
+          <div class="menu-visual" style="background:#fef9e8;padding:0;overflow:hidden;"><img src="https://images.unsplash.com/photo-1490474418585-ba9bad8fd0ea?w=600&q=80" alt="Chef's harvest selection" style="width:100%;height:100%;object-fit:cover;" loading="lazy"><div class="menu-tag">Limited</div></div>
+          <div class="menu-body">
+            <div class="menu-name">Chef's Harvest Kit</div>
+            <p class="menu-desc">Curated by our in-house chef — this week features sweetcorn, courgette, fresh basil, and a recipe card for corn fritters.</p>
+            <div class="menu-footer">
+              <span class="menu-price">£22.00/wk</span>
+              <button class="menu-add">Add to Box</button>
+            </div>
+          </div>
+        </div>
+        <div class="menu-card">
+          <div class="menu-visual" style="background:#f2f7ee;padding:0;overflow:hidden;"><img src="https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=600&q=80" alt="Wild mushrooms" style="width:100%;height:100%;object-fit:cover;" loading="lazy"><div class="menu-tag">Foraged</div></div>
+          <div class="menu-body">
+            <div class="menu-name">Wild Mushroom Mix</div>
+            <p class="menu-desc">Hand-foraged and cultivated mix: oyster, shiitake, and porcini. Sustainably sourced from Dartmoor woodland suppliers.</p>
+            <div class="menu-footer">
+              <span class="menu-price">£19.00/wk</span>
+              <button class="menu-add">Add to Box</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY GREENROOTS -->
+  <section class="why">
+    <div class="why-visual">
+      <img class="why-bg-img" src="https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=800&q=75" alt="Farm field" loading="lazy">
+      <div class="why-stat">
+        <div class="why-stat-num">98%</div>
+        <div class="why-stat-label">Customer satisfaction score across 4,200+ reviews</div>
+      </div>
+      <div class="why-stat">
+        <div class="why-stat-num">24h</div>
+        <div class="why-stat-label">From harvest to your doorstep — guaranteed</div>
+      </div>
+      <div class="why-stat" style="margin-bottom:0;">
+        <div class="why-stat-num">0%</div>
+        <div class="why-stat-label">Synthetic pesticides, herbicides, or GMOs</div>
+      </div>
+    </div>
+    <div>
+      <span class="section-tag">Why GreenRoots?</span>
+      <h2 class="section-title">Not all organic<br>is <em>equal</em></h2>
+      <ul class="why-features">
+        <li class="why-feature">
+          <div class="why-feature-icon">🌿</div>
+          <div>
+            <div class="why-feature-text">Certified Soil Association Organic</div>
+            <div class="why-feature-sub">Every farm in our network holds full Soil Association certification. We audit annually — because your trust is everything.</div>
+          </div>
+        </li>
+        <li class="why-feature">
+          <div class="why-feature-icon">📦</div>
+          <div>
+            <div class="why-feature-text">100% Plastic-Free Packaging</div>
+            <div class="why-feature-sub">Compostable trays, recycled cardboard, and natural wool insulation. Our boxes biodegrade within 26 weeks.</div>
+          </div>
+        </li>
+        <li class="why-feature">
+          <div class="why-feature-icon">🤝</div>
+          <div>
+            <div class="why-feature-text">Fair Pay for Farmers</div>
+            <div class="why-feature-sub">We pay above-market rates to our partner farms. 15p from every box goes directly into the GreenRoots Farm Fund.</div>
+          </div>
+        </li>
+        <li class="why-feature">
+          <div class="why-feature-icon">❄️</div>
+          <div>
+            <div class="why-feature-text">Carbon-Neutral Deliveries</div>
+            <div class="why-feature-sub">Our delivery fleet is 100% electric within urban areas. All rural routes are offset through certified reforestation projects.</div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- FARMS -->
+  <section class="farms" id="farms">
+    <div class="farms-inner">
+      <h2>Meet our <em>farms</em></h2>
+      <p class="farms-sub">We partner only with farms that share our values. Every grower is visited in person by our sourcing team — and we publish their practices in full.</p>
+      <div class="farms-grid">
+        <div class="farm-card">
+          <span class="farm-icon">🌾</span>
+          <div class="farm-name">Ashford Hill Farm</div>
+          <div class="farm-loc">Kent, England · Est. 1987</div>
+          <p class="farm-desc">Third-generation family farm specialising in salad leaves, brassicas, and heritage grains. 100% solar-powered since 2019.</p>
+        </div>
+        <div class="farm-card">
+          <span class="farm-icon">🍎</span>
+          <div class="farm-name">Briar Hill Organics</div>
+          <div class="farm-loc">Devon, England · Est. 2001</div>
+          <p class="farm-desc">Award-winning fruit and tomato growers using traditional companion planting methods to eliminate the need for any inputs.</p>
+        </div>
+        <div class="farm-card">
+          <span class="farm-icon">🧅</span>
+          <div class="farm-name">Clearwater Roots</div>
+          <div class="farm-loc">Yorkshire, England · Est. 1994</div>
+          <p class="farm-desc">Root vegetable specialists with a focus on heritage varieties. Their purple carrots and golden beetroots are legendary among chefs.</p>
+        </div>
+        <div class="farm-card">
+          <span class="farm-icon">🍄</span>
+          <div class="farm-name">Darkwood Cultivars</div>
+          <div class="farm-loc">Dartmoor, England · Est. 2012</div>
+          <p class="farm-desc">Specialist mushroom cultivators and foragers working across the Dartmoor National Park. Licenced wild foraging operation.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div>
+        <div class="footer-logo">🌿 GreenRoots</div>
+        <p class="footer-tagline">Organic food delivery connecting households to the farms that feed them well. Fresh, fair, and plastic-free.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Order</h4>
+        <ul>
+          <li><a href="#">Browse Boxes</a></li>
+          <li><a href="#">Build Your Box</a></li>
+          <li><a href="#">Gift a Box</a></li>
+          <li><a href="#">Refer a Friend</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Learn</h4>
+        <ul>
+          <li><a href="#">Our Farms</a></li>
+          <li><a href="#">Recipes</a></li>
+          <li><a href="#">Organic Certification</a></li>
+          <li><a href="#">Sustainability Report</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Help</h4>
+        <ul>
+          <li><a href="#">Delivery Info</a></li>
+          <li><a href="#">FAQ</a></li>
+          <li><a href="#">Contact Us</a></li>
+          <li><a href="#">hello@greenroots.co.uk</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2024 GreenRoots Ltd. Registered in England. Soil Association Certified Organic.</span>
+      <span>Privacy · Terms</span>
+    </div>
+  </footer>
+
+<div style="text-align:center;padding:16px;border-top:1px solid rgba(128,128,128,0.1);font-size:0.68rem;letter-spacing:0.1em;color:rgba(128,128,128,0.5);font-family:system-ui,sans-serif;">Built by <a href="index.html" style="color:inherit;text-decoration:none;font-weight:600;">Nord Studio</a></div>
+</body>
+</html>
